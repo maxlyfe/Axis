@@ -1,0 +1,18 @@
+Arquivos de dependências
+node_modules/
+dist/
+
+Arquivos de log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+Arquivos de ambiente - MUITO IMPORTANTE
+Contém suas chaves secretas da API do Supabase. NUNCA envie este arquivo para o GitHub.
+.env
+.env.local
+.env.*.local
+
+Arquivos de IDEs e sistema operacional
+.DS_Store
+.vscode/
