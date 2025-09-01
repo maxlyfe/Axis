@@ -1,7 +1,7 @@
 import { useState, useEffect, FormEvent, useContext, useMemo } from "react";
 import { supabase } from "../lib/supabaseClient";
 import { SessionContext } from "../App";
-import { ArrowUpCircle, ArrowDownCircle, PlusCircle, Trash2, CheckCircle, Circle, Edit, Repeat, Banknote, X, Scale, ArrowLeftRight, ChevronLeft, ChevronRight } from "lucide-react";
+import { ArrowUpCircle, ArrowDownCircle, PlusCircle, Trash2, CheckCircle, Circle, Edit, Repeat, Banknote, X, ArrowLeftRight, ChevronLeft, ChevronRight } from "lucide-react";
 
 // --- INTERFACES ---
 interface Transacao {
@@ -33,7 +33,6 @@ const Caixa = () => {
   const [gastosDoMes, setGastosDoMes] = useState<Gasto[]>([]);
   const [adiantamentosEmCaixa, setAdiantamentosEmCaixa] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   
   // Estados dos Modais
   const [editingGasto, setEditingGasto] = useState<Gasto | null>(null);
@@ -137,7 +136,6 @@ const Caixa = () => {
       setAdiantamentosEmCaixa(adiantamentosPendentesData?.reduce((acc, ag) => acc + ag.valor_adiantamento, 0) || 0);
 
     } catch (err: any) {
-      setError("Não foi possível carregar os dados financeiros.");
       console.error(err);
     } finally {
       setLoading(false);
@@ -199,7 +197,7 @@ const Caixa = () => {
       setNovoGasto({ descricao: "", valor: "", data: new Date().toISOString().split('T')[0], recorrente: false });
       closeModal();
       fetchDadosFinanceiros();
-    } catch (err) { setError("Falha ao salvar despesa."); }
+    } catch (err) { console.error("Falha ao salvar despesa."); }
   };
 
   const handlePayGasto = async (e: FormEvent) => {
@@ -209,7 +207,7 @@ const Caixa = () => {
       await supabase.from('gastos').update({ pago: true, metodo_pagamento: gastoPagamento.metodo }).eq('id', payingGasto.id);
       closeModal();
       fetchDadosFinanceiros();
-    } catch (err) { setError("Não foi possível marcar a despesa como paga."); }
+    } catch (err) { console.error("Não foi possível marcar a despesa como paga."); }
   };
 
   const handleDeleteGasto = async (gastoId: number) => {
@@ -217,7 +215,7 @@ const Caixa = () => {
     try {
       await supabase.from('gastos').delete().eq('id', gastoId);
       fetchDadosFinanceiros();
-    } catch (err) { setError("Não foi possível apagar a despesa."); }
+    } catch (err) { console.error("Não foi possível apagar a despesa."); }
   };
   
   const handleTransfer = async (e: FormEvent) => {
@@ -234,7 +232,7 @@ const Caixa = () => {
       setTransferencia({ valor: "", data: new Date().toISOString().split('T')[0] });
       closeModal();
       fetchDadosFinanceiros();
-    } catch (err) { setError("Falha ao registrar transferência."); }
+    } catch (err) { console.error("Falha ao registrar transferência."); }
   };
 
   const changeMonth = (amount: number) => { setCurrentDate(prev => new Date(prev.getFullYear(), prev.getMonth() + amount, 1)); };
@@ -301,7 +299,7 @@ const Caixa = () => {
                     </div>
                     <div className="flex items-center gap-2">
                         <span className="font-semibold text-red-600 dark:text-red-400">R$ {g.valor.toFixed(2)}</span>
-                        {g.pago ? <CheckCircle className="text-green-500" title={`Pago via ${g.metodo_pagamento}`}/> : <button onClick={() => openPayGastoModal(g)} className="text-gray-400 hover:text-green-500" title="Marcar como pago"><Circle/></button>}
+                        {g.pago ? <span title={`Pago via ${g.metodo_pagamento}`}><CheckCircle className="text-green-500"/></span> : <button onClick={() => openPayGastoModal(g)} className="text-gray-400 hover:text-green-500" title="Marcar como pago"><Circle/></button>}
                         <button onClick={() => openEditGastoModal(g)} className="text-gray-400 hover:text-indigo-500"><Edit size={16}/></button>
                         <button onClick={() => handleDeleteGasto(g.id)} className="text-gray-400 hover:text-red-500"><Trash2 size={16}/></button>
                     </div>
@@ -392,3 +390,4 @@ const Caixa = () => {
 };
 
 export default Caixa;
+

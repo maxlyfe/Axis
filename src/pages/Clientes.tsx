@@ -28,19 +28,24 @@ const Clientes = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetchClientes();
+        if(session){
+            fetchClientes();
+        }
     }, [session]);
 
     const fetchClientes = async () => {
         setLoading(true);
         const { data, error } = await supabase.from('clientes').select('*').order('nome', { ascending: true });
-        if (error) console.error("Erro ao buscar clientes", error);
-        else setClientes(data || []);
+        if (error) {
+            console.error("Erro ao buscar clientes", error);
+        } else {
+            setClientes(data || []);
+        }
         setLoading(false);
     };
 
     const handleSelectCliente = async (cliente: Cliente) => {
-        const { data, error } = await supabase
+        const { data } = await supabase
             .from('agendamentos')
             .select('data_inicio, servicos_selecionados')
             .eq('cliente_id', cliente.id)
@@ -72,7 +77,12 @@ const Clientes = () => {
 
     const openModal = (cliente: Cliente | null) => {
         setEditingCliente(cliente);
-        setNovoCliente(cliente || { nome: "", telefone: "", email: "", observacoes: "" });
+        setNovoCliente({
+            nome: cliente?.nome || "",
+            telefone: cliente?.telefone || "",
+            email: cliente?.email || "",
+            observacoes: cliente?.observacoes || ""
+        });
         setIsModalOpen(true);
     };
     const closeModal = () => setIsModalOpen(false);
@@ -156,3 +166,4 @@ const Clientes = () => {
 };
 
 export default Clientes;
+

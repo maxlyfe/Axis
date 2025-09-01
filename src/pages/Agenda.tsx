@@ -69,11 +69,12 @@ const Agenda = () => {
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [conflito, setConflito] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
   // --- EFEITOS ---
   useEffect(() => {
-    fetchInitialData();
+    if (session) {
+        fetchInitialData();
+    }
   }, [currentMonth, session]);
   
   const { valorTotal, dataInicio, dataFim } = useMemo(() => {
@@ -110,7 +111,6 @@ const Agenda = () => {
     const { data, error } = await supabase.from("servicos").select("*");
     if (error) {
       console.error("Erro ao buscar serviços:", error);
-      setError("Não foi possível carregar os serviços cadastrados.");
     } else {
       setServicosDisponiveis(data || []);
     }
@@ -133,7 +133,6 @@ const Agenda = () => {
       setAgendamentosDoMes(data || []);
     } catch (err: any) {
       console.error("Erro ao buscar agendamentos:", err);
-      setError("Não foi possível carregar os agendamentos do mês.");
     } 
   };
   
@@ -293,7 +292,7 @@ const Agenda = () => {
       const novoStatus = agendamento.status === 'cancelado' ? 'agendado' : 'cancelado';
       await supabase.from('agendamentos').update({ status: novoStatus }).eq('id', agendamento.id);
       fetchAgendamentosDoMes();
-    } catch (err: any) { setError(`Não foi possível ${acao} o agendamento.`); }
+    } catch (err: any) { console.error(`Não foi possível ${acao} o agendamento.`); }
   };
   const handleOpenCheckoutModal = (agendamento: Agendamento) => {
     setCheckoutAgendamento(agendamento);
@@ -323,7 +322,7 @@ const Agenda = () => {
         setCheckoutAgendamento(null);
         fetchAgendamentosDoMes();
     } catch (err: any) {
-        setError("Falha ao finalizar o agendamento.");
+        console.error("Falha ao finalizar o agendamento.");
     }
   };
   
@@ -345,7 +344,7 @@ const Agenda = () => {
       setIsAdiantamentoModalOpen(false);
       setConfirmingAdiantamento(null);
       fetchAgendamentosDoMes();
-    } catch (err: any) { setError("Não foi possível confirmar o adiantamento."); }
+    } catch (err: any) { console.error("Não foi possível confirmar o adiantamento."); }
   };
   
   const openModal = () => {
@@ -487,7 +486,7 @@ const Agenda = () => {
                           <button onClick={() => handleOpenCheckoutModal(ag)} title="Finalizar (Checkout)" className="hover:text-teal-500"><DollarSign size={18} /></button>
                           {ag.valor_adiantamento > 0 && 
                             (ag.adiantamento_confirmado ? 
-                              <CheckCircle className="text-green-500" title={`Adiantamento confirmado via ${ag.adiantamento_metodo_pagamento}`}/> : 
+                              <span title={`Adiantamento confirmado via ${ag.adiantamento_metodo_pagamento}`}><CheckCircle className="text-green-500"/></span> : 
                               <button onClick={() => handleOpenConfirmAdiantamento(ag)} title="Confirmar Adiantamento" className="hover:text-green-500"><Circle/></button>
                             )
                           }
