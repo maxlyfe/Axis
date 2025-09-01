@@ -1,7 +1,7 @@
 import { useState, useEffect, FormEvent, useContext, useMemo } from "react";
 import { supabase } from "../lib/supabaseClient";
 import { SessionContext } from "../App";
-import { ArrowUpCircle, ArrowDownCircle, PlusCircle, Trash2, CheckCircle, Circle, Edit, Repeat, Banknote, X, Scale, ArrowLeftRight } from "lucide-react";
+import { ArrowUpCircle, ArrowDownCircle, PlusCircle, Trash2, CheckCircle, Circle, Edit, Repeat, Banknote, X, ArrowLeftRight } from "lucide-react";
 
 // --- INTERFACES ---
 interface Transacao {
@@ -33,6 +33,7 @@ const Caixa = () => {
   const [gastosDoMes, setGastosDoMes] = useState<Gasto[]>([]);
   const [adiantamentosEmCaixa, setAdiantamentosEmCaixa] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   
   // Estados dos Modais
   const [editingGasto, setEditingGasto] = useState<Gasto | null>(null);
@@ -300,7 +301,7 @@ const Caixa = () => {
                     </div>
                     <div className="flex items-center gap-2">
                         <span className="font-semibold text-red-600 dark:text-red-400">R$ {g.valor.toFixed(2)}</span>
-                        {g.pago ? <CheckCircle className="text-green-500" title={`Pago via ${g.metodo_pagamento}`}/> : <button onClick={() => openPayGastoModal(g)} className="text-gray-400 hover:text-green-500" title="Marcar como pago"><Circle/></button>}
+                        {g.pago ? <CheckCircle className="text-green-500" aria-label={`Pago via ${g.metodo_pagamento}`/> : <button onClick={() => openPayGastoModal(g)} className="text-gray-400 hover:text-green-500" aria-label="Marcar como pago"><Circle/></button>}
                         <button onClick={() => openEditGastoModal(g)} className="text-gray-400 hover:text-indigo-500"><Edit size={16}/></button>
                         <button onClick={() => handleDeleteGasto(g.id)} className="text-gray-400 hover:text-red-500"><Trash2 size={16}/></button>
                     </div>
@@ -391,4 +392,3 @@ const Caixa = () => {
 };
 
 export default Caixa;
-

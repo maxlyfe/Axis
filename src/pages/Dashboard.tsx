@@ -204,7 +204,7 @@ const Dashboard = () => {
             <ResponsiveContainer width="100%" height={300}>
                 <PieChart>
                     <Pie data={servicosPopularesData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={80} label>
-                        {servicosPopularesData.map((entry, index) => (
+                        {servicosPopularesData.map((_entry, index) => (
                           <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                         ))}
                     </Pie>
@@ -218,4 +218,3 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
-
