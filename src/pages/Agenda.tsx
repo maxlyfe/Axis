@@ -487,7 +487,7 @@ const Agenda = () => {
                           <button onClick={() => handleOpenCheckoutModal(ag)} aria-label="Finalizar (Checkout)" className="hover:text-teal-500"><DollarSign size={18} /></button>
                           {ag.valor_adiantamento > 0 && 
                             (ag.adiantamento_confirmado ? 
-                              <CheckCircle className="text-green-500" aria-label={`Adiantamento confirmado via ${ag.adiantamento_metodo_pagamento}`/> : 
+                              <CheckCircle className="text-green-500" aria-label={`Adiantamento confirmado via ${ag.adiantamento_metodo_pagamento}`}/> : 
                               <button onClick={() => handleOpenConfirmAdiantamento(ag)} aria-label="Confirmar Adiantamento" className="hover:text-green-500"><Circle/></button>
                             )
                           }
