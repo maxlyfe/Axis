@@ -69,7 +69,7 @@ const Agenda = () => {
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [conflito, setConflito] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
-  const [_, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   // --- EFEITOS ---
   useEffect(() => {
@@ -481,18 +481,18 @@ const Agenda = () => {
                    )}
 
                    <div className="flex items-center space-x-3 text-gray-500 dark:text-gray-400 mt-4 sm:mt-0 sm:ml-6 self-start sm:self-center">
-                      {ag.status === 'cancelado' ? (<button onClick={() => handleCancel(ag)} aria-label="Reativar Agendamento" className="hover:text-blue-500"><RotateCw/></button>) : null}
+                      {ag.status === 'cancelado' ? (<button onClick={() => handleCancel(ag)} title="Reativar Agendamento" className="hover:text-blue-500"><RotateCw/></button>) : null}
                       {ag.status === 'agendado' ? (
                         <>
-                          <button onClick={() => handleOpenCheckoutModal(ag)} aria-label="Finalizar (Checkout)" className="hover:text-teal-500"><DollarSign size={18} /></button>
+                          <button onClick={() => handleOpenCheckoutModal(ag)} title="Finalizar (Checkout)" className="hover:text-teal-500"><DollarSign size={18} /></button>
                           {ag.valor_adiantamento > 0 && 
                             (ag.adiantamento_confirmado ? 
-                              <CheckCircle className="text-green-500" aria-label={`Adiantamento confirmado via ${ag.adiantamento_metodo_pagamento}`}/> : 
-                              <button onClick={() => handleOpenConfirmAdiantamento(ag)} aria-label="Confirmar Adiantamento" className="hover:text-green-500"><Circle/></button>
+                              <CheckCircle className="text-green-500" title={`Adiantamento confirmado via ${ag.adiantamento_metodo_pagamento}`}/> : 
+                              <button onClick={() => handleOpenConfirmAdiantamento(ag)} title="Confirmar Adiantamento" className="hover:text-green-500"><Circle/></button>
                             )
                           }
-                          <button onClick={() => handleEdit(ag)} aria-label="Editar Agendamento" className="hover:text-indigo-500"><Edit size={18} /></button>
-                          <button onClick={() => handleCancel(ag)} aria-label="Cancelar Agendamento" className="hover:text-red-500"><Trash2 size={18} /></button>
+                          <button onClick={() => handleEdit(ag)} title="Editar Agendamento" className="hover:text-indigo-500"><Edit size={18} /></button>
+                          <button onClick={() => handleCancel(ag)} title="Cancelar Agendamento" className="hover:text-red-500"><Trash2 size={18} /></button>
                         </>
                       ) : null}
                    </div>
@@ -583,7 +583,7 @@ const Agenda = () => {
 
   return (
     <>
-      <style>{`.input-style { display: block; width: 100%; padding: 0.5rem 0.75rem; font-size: 0.875rem; line-height: 1.25rem; background-color: white; border: 1px solid #D1D5DB; border-radius: 0.375rem; box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); } .dark .input-style { background-color: #374151; border-color: #4B5563; }`}</style>
+      <style>{`.input-style { display: block; width: 100%; padding: 0.5rem 0.75rem; font-size: 0.875rem; line-height: 1.25rem; background-color: white; border: 1px solid #D1D5DB; border-radius: 0.375rem; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); } .dark .input-style { background-color: #374151; border-color: #4B5563; }`}</style>
       {viewMode === 'month' && renderMonthView()}
       {viewMode === 'day' && renderDayView()}
       {isModalOpen && (

@@ -1,7 +1,7 @@
 import { useState, useEffect, FormEvent, useContext, useMemo } from "react";
 import { supabase } from "../lib/supabaseClient";
 import { SessionContext } from "../App";
-import { ArrowUpCircle, ArrowDownCircle, PlusCircle, Trash2, CheckCircle, Circle, Edit, Repeat, Banknote, X, ArrowLeftRight } from "lucide-react";
+import { ArrowUpCircle, ArrowDownCircle, PlusCircle, Trash2, CheckCircle, Circle, Edit, Repeat, Banknote, X, Scale, ArrowLeftRight, ChevronLeft, ChevronRight } from "lucide-react";
 
 // --- INTERFACES ---
 interface Transacao {
@@ -137,7 +137,7 @@ const Caixa = () => {
       setAdiantamentosEmCaixa(adiantamentosPendentesData?.reduce((acc, ag) => acc + ag.valor_adiantamento, 0) || 0);
 
     } catch (err: any) {
-      //setError("Não foi possível carregar os dados financeiros.");
+      setError("Não foi possível carregar os dados financeiros.");
       console.error(err);
     } finally {
       setLoading(false);
@@ -253,9 +253,9 @@ const Caixa = () => {
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100">Gestão de Caixa</h1>
         <div className="flex items-center gap-2">
-          <button onClick={() => changeMonth(-1)} className="p-2 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700">‹</button>
+          <button onClick={() => changeMonth(-1)} className="p-2 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700"><ChevronLeft/></button>
           <span className="font-semibold capitalize">{currentDate.toLocaleString('pt-BR', { month: 'long', year: 'numeric' })}</span>
-          <button onClick={() => changeMonth(1)} className="p-2 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700">›</button>
+          <button onClick={() => changeMonth(1)} className="p-2 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700"><ChevronRight/></button>
         </div>
       </div>
 
@@ -301,7 +301,7 @@ const Caixa = () => {
                     </div>
                     <div className="flex items-center gap-2">
                         <span className="font-semibold text-red-600 dark:text-red-400">R$ {g.valor.toFixed(2)}</span>
-                        {g.pago ? <CheckCircle className="text-green-500" aria-label={`Pago via ${g.metodo_pagamento}`/> : <button onClick={() => openPayGastoModal(g)} className="text-gray-400 hover:text-green-500" aria-label="Marcar como pago"><Circle/></button>}
+                        {g.pago ? <CheckCircle className="text-green-500" title={`Pago via ${g.metodo_pagamento}`}/> : <button onClick={() => openPayGastoModal(g)} className="text-gray-400 hover:text-green-500" title="Marcar como pago"><Circle/></button>}
                         <button onClick={() => openEditGastoModal(g)} className="text-gray-400 hover:text-indigo-500"><Edit size={16}/></button>
                         <button onClick={() => handleDeleteGasto(g.id)} className="text-gray-400 hover:text-red-500"><Trash2 size={16}/></button>
                     </div>

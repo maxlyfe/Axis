@@ -72,7 +72,7 @@ const Clientes = () => {
 
     const openModal = (cliente: Cliente | null) => {
         setEditingCliente(cliente);
-        setNovoCliente(cliente ? { ...cliente, telefone: cliente.telefone || "" } : { nome: "", telefone: "", email: "", observacoes: "" });
+        setNovoCliente(cliente || { nome: "", telefone: "", email: "", observacoes: "" });
         setIsModalOpen(true);
     };
     const closeModal = () => setIsModalOpen(false);
