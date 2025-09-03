@@ -1,20 +1,31 @@
-import { useContext } from "react";
+import { useState, useContext } from "react"; // ALTERADO: Adicionado useState
 import { Outlet } from "react-router-dom";
-import { SessionContext } from "../../App"; // Importamos o Contexto do App.tsx
+import { SessionContext } from "../../App";
 import Sidebar from "./Sidebar";
 import Header from "./Header";
 
 const Layout = () => {
-  // Usamos o hook useContext para ler a informação da sessão do nosso contexto global.
   const session = useContext(SessionContext);
+  // NOVO: Estado para controlar a visibilidade do sidebar em telas pequenas
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   return (
-    <div className="flex h-screen bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
-      <Sidebar />
+    // A classe `relative` é necessária para o posicionamento do sidebar mobile
+    <div className="relative flex h-screen bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200 md:flex">
+      {/* NOVO: Overlay para fechar o menu ao clicar fora */}
+      {isSidebarOpen && (
+        <div 
+          className="fixed inset-0 z-20 bg-black opacity-50 md:hidden"
+          onClick={() => setIsSidebarOpen(false)}
+        ></div>
+      )}
+
+      {/* ALTERADO: Passando o estado e a função para o Sidebar */}
+      <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} />
 
       <div className="flex flex-col flex-1 overflow-y-auto">
-        {/* Passamos a sessão para o Header para que ele saiba quem está logado */}
-        <Header session={session} />
+        {/* ALTERADO: Passando a função para abrir o menu para o Header */}
+        <Header session={session} onMenuClick={() => setIsSidebarOpen(true)} />
         
         <main className="p-6 md:p-8">
           <Outlet />
@@ -25,4 +36,3 @@ const Layout = () => {
 };
 
 export default Layout;
-
