@@ -10,7 +10,8 @@ import Caixa from "./pages/Caixa";
 import Servicos from "./pages/Servicos";
 import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
-import Clientes from "./pages/Clientes"; // NOVO IMPORT
+import Clientes from "./pages/Clientes";
+import Configuracoes from "./pages/Configuracoes";
 
 export const SessionContext = createContext<Session | null>(null);
 
@@ -83,8 +84,9 @@ function App() {
             <Route path="/" element={<Dashboard />} />
             <Route path="/agenda" element={<Agenda />} />
             <Route path="/caixa" element={<Caixa />} />
-            <Route path="/clientes" element={<Clientes />} /> {/* NOVA ROTA */}
+            <Route path="/clientes" element={<Clientes />} />
             <Route path="/servicos" element={<Servicos />} />
+            <Route path="/configuracoes" element={<Configuracoes />} /> {/* NOVA ROTA */}
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>

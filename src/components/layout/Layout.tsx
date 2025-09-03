@@ -3,11 +3,22 @@ import { Outlet } from "react-router-dom";
 import { SessionContext } from "../../App";
 import Sidebar from "./Sidebar";
 import Header from "./Header";
+import { LayoutDashboard, Calendar, DollarSign, Wrench, Users, LogOut, X, Settings } from 'lucide-react'; // NOVO: Ícone Settings
+
 
 const Layout = () => {
   const session = useContext(SessionContext);
   // NOVO: Estado para controlar a visibilidade do sidebar em telas pequenas
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  const navLinks = [
+    { icon: LayoutDashboard, text: 'Dashboard', to: '/' },
+    { icon: Calendar, text: 'Agenda', to: '/agenda' },
+    { icon: DollarSign, text: 'Caixa', to: '/caixa' },
+    { icon: Users, text: 'Clientes', to: '/clientes' },
+    { icon: Wrench, text: 'Serviços', to: '/servicos' },
+    { icon: Settings, text: 'Configurações', to: '/configuracoes' }, // NOVO LINK
+  ];
 
   return (
     // A classe `relative` é necessária para o posicionamento do sidebar mobile
